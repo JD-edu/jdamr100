@@ -1,7 +1,13 @@
 #include "I2Cdev.h"
 #include <PID_v1.h>
 #include "MPU6050_6Axis_MotionApps20.h"
+
 MPU6050 mpu;
+
+#define motor_A_enable 10
+#define motor_B_enable 11
+#define motor_A 12
+#define motor_B 13
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -71,15 +77,9 @@ void setup() {
         Serial.println(F(")"));
     }
 
-    pinMode (6, OUTPUT);
-    pinMode (9, OUTPUT);
-    pinMode (10, OUTPUT);
-    pinMode (11, OUTPUT);
+  pinMode(motor_A, OUTPUT);
+  pinMode(motor_B, OUTPUT);
 
-    analogWrite(6,LOW);
-    analogWrite(9,LOW);
-    analogWrite(10,LOW);
-    analogWrite(11,LOW);
 }
 
  
@@ -90,14 +90,13 @@ void loop() {
     while (!mpuInterrupt && fifoCount < packetSize)
 {
         pid.Compute();   
-      
         Serial.print(input); Serial.print(" =>"); Serial.println(output);
                
         if (input>150 && input<200){//로봇이 범위 내에서 기울어지는 경우
         if (output>0) //앞으로
-        Forward(); //전진
+        Forward(output,output); //전진
         else if (output<0) //뒤로
-        Reverse(); //후진
+        Reverse(output*-1,output*-1); //후진
         }
         else //로봇이 기울어지지 않은 경우
         Stop(); //모터 정지
@@ -112,48 +111,45 @@ void loop() {
     {
         mpu.resetFIFO();
         Serial.println(F("FIFO overflow!"));
-
     }
     else if (mpuIntStatus & 0x02)
     {
         while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-
         mpu.getFIFOBytes(fifoBuffer, packetSize);
-        
+
         fifoCount -= packetSize;
 
         mpu.dmpGetQuaternion(&q, fifoBuffer); //get value for q
         mpu.dmpGetGravity(&gravity, &q); //get value for gravity
         mpu.dmpGetYawPitchRoll(ypr, &q, &gravity); //get value for ypr
-
         input = ypr[2] * 180/M_PI + 180;
    }
 }
 
-void Forward() //전진
-{
-    analogWrite(6,output);
-    analogWrite(9,0);
-    analogWrite(10,output);
-    analogWrite(11,0);
-    Serial.print("F"); 
+//전진
+void Forward(int R, int L) {
+  analogWrite(motor_A_enable, L);
+  analogWrite(motor_B_enable, R);
+  digitalWrite(motor_A, HIGH);
+  digitalWrite(motor_B, HIGH);
+  Serial.print("F"); 
 }
 
-void Reverse() //후진
-{
-    analogWrite(6,0);
-    analogWrite(9,output*-1);
-    analogWrite(10,0);
-    analogWrite(11,output*-1); 
-    Serial.print("R");
+//후진
+void Reverse(int R, int L) {
+  analogWrite(motor_A_enable, L);
+  analogWrite(motor_B_enable, R);
+  digitalWrite(motor_A, LOW);
+  digitalWrite(motor_B, LOW);
+  Serial.print("R");
 }
 
-void Stop() //정지
-{
-    analogWrite(6,0);
-    analogWrite(9,0);
-    analogWrite(10,0);
-    analogWrite(11,0); 
-    Serial.print("S");
+//정지
+void Stop() {
+  analogWrite(motor_A_enable, 0);
+  analogWrite(motor_B_enable, 0);
+  digitalWrite(motor_A, HIGH);
+  digitalWrite(motor_B, HIGH);
+  Serial.print("S");
 }
 
