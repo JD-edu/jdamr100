@@ -1,7 +1,7 @@
-#define motor_A_enable 10
-#define motor_B_enable 11
-#define motor_A 12
-#define motor_B 13
+#define motor_A_enable 12
+#define motor_B_enable 13
+#define motor_A 10
+#define motor_B 11
 
 #define encoder_R 2
 #define encoder_L 3
@@ -15,7 +15,7 @@ unsigned long encoder_update_interval = 50;
 
 int moving_direction = 0;
 int moving_speed = 0;
-int diff_weight = 2;
+int diff_weight = 4;
 int delta_R = 0;
 int delta_L = 0;
 int speed_R = 0;
