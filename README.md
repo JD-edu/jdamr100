@@ -68,9 +68,11 @@ JDAMR100의 예제 코드와 문서는 아래와 같이 구성됩니다:
 
   * 103_ultrasonic_test: 초음파 센서 테스트 코드
 
-  * 104_encoder_test: 양쪽 바퀴 엔코더 동작 테스트 (사용하지 않음, 삭제 예정)
+  * 104_encoder_go_forward: 양쪽 바퀴 엔코더 동작 테스트
 
-  * 105_esp32_serial_comm_with_arduino: ESP32에서 정보를 보내고, 아두이노에서 시리얼 모니터로 정보를 받는 코드
+  * 105_arduino_serial_comm_with_esp32: (아두이노용)아두이노의 소프트 시리얼을 통해 ESP32에서 전송한 정보를 받는 코드
+  
+  * 105_esp32_serial_comm_with_arduino: ESP32에서 시리얼2를 이용해 아두이노에 정보를 보내는 코드
 
   * 106_esp32_i2c_test: OLED 디스플레이 I2C 통신 테스트 코드
 
@@ -80,11 +82,11 @@ JDAMR100의 예제 코드와 문서는 아래와 같이 구성됩니다:
 
   * 109_arduino_motor_remote_control: ESP32에서 w, a, s, d 키 명령을 받아 아두이노에서 모터를 제어하는 코드
 
-  * 110_socket_serial_bridge: ESP32가 WiFi 소켓으로 받은 신호를 시리얼로 아두이노에 전달하는 코드
+  * 110_esp32_socket_serial_bridge: ESP32가 WiFi 소켓으로 받은 신호를 시리얼로 아두이노에 전달하는 코드
 
-  * 111_arduino_robot_remote_control: 109 코드와 중복될 가능성이 있음
+  * 111_socket_robot_remote_control: 파이썬을 활용해 w, a, s, d 키로 제어하는 코드
 
-  * 112_arduino_ROS_motor_remote_ctrl: ROS 환경에서의 모터 제어 코드 (생략 예정)*
+  * 112_arduino_ROS_motor_remote_ctrl: ROS 환경에서의 모터 제어 코드 ([jdamr100_ros 참고](https://github.com/JD-edu/jdamr100_ros ))
 
 ### 사용 준비
 
