@@ -9,7 +9,8 @@
 [105_esp32_serial_comm_with_arduino 아두이노 - ESP32 시리얼 통신(esp32 출력)](#105_esp32_serial_comm_with_arduino)   
 [106_esp32_i2c_test 아두이노의 소프트 시리얼을 통해 ESP32에서 전송한 정보를 받는 코드](#106_esp32_i2c_test)   
 [107_robot_drive_with_encoder ESP32 없이 엔코더를 사용하여 직진](#107_robot_drive_with_encoder)   
-[108_arduino_serial_esp32_comm 아두이노 - ESP32 블루투스 통신](#108_arduino_serial_esp32_comm)
+[108_arduino_serial_esp32_comm 아두이노 - ESP32 블루투스 통신](#108_arduino_serial_esp32_comm)   
+[109_arduino_motor_remote_control ESP32로 아두이노 모터제어(W,A,S,D사용)](#109_arduino_motor_remote_control)
 
 
 ## 101_motor_no_speed_control
@@ -828,6 +829,129 @@ void loop() {
 - 읽은 데이터를 `Serial.print()`를 이용하여 **시리얼 모니터에 출력**.
 - 받은 데이터를 다시 `mySerial.println()`을 사용하여 **ESP32로 되돌려 전송(Echo)**.
 - 100ms마다 루프를 반복하여 **연속적인 데이터 수신을 처리**.
+
+---
+
+## 109_arduino_motor_remote_control
+
+### 📌 코드의 핵심 기능 요약
+- **ESP32에서 수신한 `w, a, s, d` 명령을 기반으로 아두이노에서 모터를 제어하는 코드**.
+- `SoftwareSerial`을 이용해 **ESP32로부터 명령을 수신하고, 시리얼 모니터에서도 입력을 받을 수 있음**.
+- 전진(`w`), 후진(`s`), 좌회전(`a`), 우회전(`d`), 정지(`space`) 명령을 인식하여 **모터를 제어**.
+
+---
+
+### 1. 핀 정의 및 소프트웨어 시리얼 설정
+```cpp
+#include <SoftwareSerial.h>
+
+#define motor_A_enable 12
+#define motor_B_enable 13
+#define motor_A 10
+#define motor_B 11
+
+// 소프트웨어 시리얼 핀 설정 (7번: RX, 8번: TX)
+SoftwareSerial mySerial(7, 8); // RX, TX
+```
+- `motor_A_enable`, `motor_B_enable` → **모터 속도 조절 핀**
+- `motor_A`, `motor_B` → **모터 회전 방향 제어 핀**
+- `mySerial(7, 8)` → **7번 핀을 RX, 8번 핀을 TX로 설정하여 ESP32와 시리얼 통신**
+
+---
+
+### 2. `setup()` 함수
+```cpp
+void setup() {
+  // 소프트웨어 시리얼 시작
+  mySerial.begin(9600);
+  
+  // 기본 시리얼 모니터 시작
+  Serial.begin(115200);
+  
+  Serial.println("SoftwareSerial 데이터 수신 준비 완료");
+  pinMode(motor_A, OUTPUT);
+  pinMode(motor_B, OUTPUT);
+  pinMode(motor_A_enable, OUTPUT);
+  pinMode(motor_B_enable, OUTPUT);
+}
+```
+- `mySerial.begin(9600);` → **ESP32와의 시리얼 통신 속도를 9600bps로 설정**.
+- `Serial.begin(115200);` → **기본 시리얼 모니터 속도를 115200bps로 설정**.
+- 모터 제어를 위해 **모든 관련 핀을 출력 모드로 설정**.
+
+---
+
+### 3. 모터 제어 함수
+```cpp
+void forward(int R, int L) {
+  digitalWrite(motor_A_enable, LOW);
+  digitalWrite(motor_B_enable, LOW);
+  analogWrite(motor_A, L);
+  analogWrite(motor_B, R);
+}
+```
+- `forward(R, L)`: **모터를 정방향으로 회전**하여 전진.
+- `backward(R, L)`, `turnLeft(R, L)`, `turnRight(R, L)`, `stopAll()`도 유사한 방식으로 구현됨.
+
+---
+
+### 4. `loop()` 함수 - 명령 수신 및 모터 제어
+```cpp
+void loop() {
+  // 소프트웨어 시리얼로 데이터가 수신되었는지 확인
+  if (mySerial.available()) {
+    String incomingStr2 = mySerial.readStringUntil('\n');  // 수신한 데이터 읽기
+    if(incomingStr2[0] == 'w'){
+      Serial.println("forward");
+      forward(255, 255);
+    }else if(incomingStr2[0] == 's'){
+      Serial.println("backward");
+      backward(255, 255);
+    }else if(incomingStr2[0] == ' '){
+      Serial.println("stop");
+      stopAll();
+    }else if(incomingStr2[0] == 'a'){
+      Serial.println("turnleft");
+      turnLeft(255, 255);
+    }else if(incomingStr2[0] == 'd'){
+      Serial.println("turnRight");
+      turnRight(255, 255);
+    }
+  }
+```
+- **ESP32에서 받은 데이터(`w, a, s, d, space`)를 분석하여 모터 동작 수행**.
+- 입력에 따라 **전진, 후진, 좌회전, 우회전, 정지 명령 실행**.
+
+```cpp
+  if(Serial.available()){
+    String incomingStr = Serial.readStringUntil('\n');
+    if(incomingStr[0] == 'w'){
+      Serial.println("forward");
+      forward(255, 255);
+    }else if(incomingStr[0] == 's'){
+      Serial.println("backward");
+      backward(255, 255);
+    }else if(incomingStr[0] == ' '){
+      Serial.println("stop");
+      stopAll();
+    }else if(incomingStr[0] == 'a'){
+      Serial.println("turnleft");
+      turnLeft(255, 255);
+    }else if(incomingStr[0] == 'd'){
+      Serial.println("turnRight");
+      turnRight(255, 255);
+    }
+  }
+```
+- **PC 시리얼 모니터에서 직접 명령 입력 가능**.
+- 동일한 명령어(`w, a, s, d, space`)를 사용하여 **모터 제어 가능**.
+
+```cpp
+  // 100ms 지연
+  delay(100);
+}
+```
+- **명령을 처리한 후 100ms 대기 후 반복 실행**.
 
 ---
 
