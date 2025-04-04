@@ -1,3 +1,27 @@
+/*
+MIT License
+
+Copyright (c) 2024 JD edu. http://jdedu.kr author: conner.jeong@gmail.com
+     
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+     
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+     
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN TH
+SOFTWARE.
+*/
+
 #include <WiFi.h>
 
 // Wi-Fi 설정
@@ -36,6 +60,7 @@ void setup() {
   Serial.println("서버 시작됨, 클라이언트 대기 중...");
 
   pinMode(2, OUTPUT);
+  digitalWrite(2, LOW);
 }
 
 int linear = 0, angle = 0;
@@ -45,7 +70,8 @@ void loop() {
 
   if (client) {
     Serial.println("클라이언트가 연결되었습니다.");
-
+    // 연결이 되었음을 표시
+    digitalWrite(2, HIGH);
     while (client.connected()) {
       if (client.available()) {
         // 클라이언트로부터 데이터 수신
@@ -57,7 +83,8 @@ void loop() {
         client.println("데이터 수신 완료");
       }
     }
-
+    // 연결이 끊어짐을 표시 
+    digitalWrite(2, LOW);
     // 클라이언트 연결 종료
     client.stop();
     Serial.println("클라이언트 연결 종료.");

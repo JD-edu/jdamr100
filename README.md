@@ -56,35 +56,27 @@ JDAMR100의 예제 코드와 문서는 아래와 같이 구성됩니다:
 
 * README.md: 본 파일로, JDAMR100의 개요 및 주요 기능을 설명합니다.
 
-* doc/assemble.md: JDAMR100의 조립 매뉴얼이 포함되어 있습니다.
+* [doc/assemble.md](doc/assemble.md): JDAMR100의 조립 매뉴얼이 포함되어 있습니다.
 
-* arduino/: 아두이노 및 ESP32에서 실행할 코드들이 포함된 폴더
-
-  * 101_motor_no_speed_control: 모터의 단순 정회전/역회전 테스트
-
-  * 101_motor_variable_speed: analogWrite를 이용한 속도 조절 테스트
-
-  * 102_IR_test: IR 센서 테스트 코드
-
-  * 103_ultrasonic_test: 초음파 센서 테스트 코드
-
-  * 104_encoder_test: 양쪽 바퀴 엔코더 동작 테스트 (사용하지 않음, 삭제 예정)
-
-  * 105_esp32_serial_comm_with_arduino: ESP32에서 정보를 보내고, 아두이노에서 시리얼 모니터로 정보를 받는 코드
-
-  * 106_esp32_i2c_test: OLED 디스플레이 I2C 통신 테스트 코드
-
-  * 107_robot_drive_with_encoder: ESP32 없이 엔코더를 사용하여 직진하는 코드
-
-  * 108_esp32_serial_BT_bridge: 블루투스를 이용한 ESP32와 아두이노 간 통신 테스트 코드
-
-  * 109_arduino_motor_remote_control: ESP32에서 w, a, s, d 키 명령을 받아 아두이노에서 모터를 제어하는 코드
-
-  * 110_socket_serial_bridge: ESP32가 WiFi 소켓으로 받은 신호를 시리얼로 아두이노에 전달하는 코드
-
-  * 111_arduino_robot_remote_control: 109 코드와 중복될 가능성이 있음
-
-  * 112_arduino_ROS_motor_remote_ctrl: ROS 환경에서의 모터 제어 코드 (생략 예정)*
+* [arduino](arduino): 아두이노 및 ESP32에서 실행할 코드들이 포함된 폴더   
+  * 코드에 대한 자세한 설명은 [doc/arduino.md](doc/arduino.md) 참고   
+  * [101_motor_no_speed_control 모터 정/역회전 테스트(아두이노)](arduino/101_motor_no_speed_control/101_motor_no_speed_control.ino)   
+  * [101_motor_variable_speed_control 모터 속도 조절 테스트(아두이노)](arduino/101_motor_variable_speed_control/101_motor_variable_speed_control.ino)   
+  * [102_ir_test IR 센서 테스트(아두이노)](arduino/102_IR_test/102_IR_test.ino102_ir_test)   
+  * [103_ultrasonic_test 초음파 센서 테스트(아두이노)](arduino/103_ultrasonic_test/103_ultrasonic_test.ino)   
+  * [104_encoder_go_forward 양쪽 바퀴 엔코더 동작 테스트(아두이노)](arduino/104_encoder_go_forward/104_encoder_go_forward.ino)   
+  * [105_arduino_serial_comm_with_esp32 아두이노 - ESP32 시리얼 통신(아두이노 수신 코드)](arduino/105_arduino_serial_comm_with_esp32/105_arduino_serial_comm_with_esp32.ino)   
+  * [105_esp32_serial_comm_with_arduino 아두이노 - ESP32 시리얼 통신(esp32 출력 코드)](arduino/105_esp32_serial_comm_with_arduino/105_esp32_serial_comm_with_arduino.ino)   
+  * [106_esp32_i2c_test 소프트 시리얼을 통해 ESP32에서 전송한 정보를 받는 코드(아두이노)](arduino/106_esp32_i2c_test/106_esp32_i2c_test.ino)   
+  * [107_robot_drive_with_encoder ESP32 없이 엔코더를 사용하여 직진하는 코드(아두이노)](arduino/107_robot_drive_with_encoder/107_robot_drive_with_encoder.ino)   
+  * [108_arduino_serial_esp32_comm 아두이노 - ESP32 블루투스 통신(아두이노)](arduino/108_arduino_serial_esp32_comm/108_arduino_serial_esp32_comm.ino)   
+  * [109_arduino_motor_remote_control ESP32에서 수신한 W,A,S,D,SPACE로 모터 제어(아두이노)](arduino/109_arduino_motor_remote_control/109_arduino_motor_remote_control.ino)   
+  * [110_esp32_socket_comm ESP32와 소켓(TCP) 통신하는 파이썬 클라이언트](arduino/110_esp32_socket_serial_bridge/110_esp32_socket_comm.py)   
+  * [110_esp32_socket_serial_bridge 클라이언트(소켓) - ESP32 - 아두이노(시리얼) 통신하는 코드(ESP32)](arduino/110_esp32_socket_serial_bridge/110_esp32_socket_serial_bridge.ino)   
+  * [111_esp32_socket_robot_remote ESP32와 소켓(TCP) 통신하여 로봇을 제어하는 파이썬 클라이언트](arduino/111_socket_robot_remote_control/111_esp32_socket_robot_remote_ctrl.py)   
+  * [112_arduino_ros_motor_remote_ctrl ESP32에 W,A,S,D,SPACE를 전송하는 파이썬 클라이언트](arduino/112_arduino_ROS_motor_remote_ctrl/112_arduino_ROS_motor_remote_ctrl.ino)([jdamr100_ros 참고](https://github.com/JD-edu/jdamr100_ros ))   
+  * [balancing_l298p MPU6050 센서와 L298P 모터드라이버를 이용한 밸런싱 로봇 구현](arduino/balancing_l298p/balancing_L298P.ino)   
+  * [line_tracer 적외선(IR) 센서를 이용한 라인 트레이싱(Line Tracing)](arduino/line_tracer/line_tracer.ino)
 
 ### 사용 준비
 
