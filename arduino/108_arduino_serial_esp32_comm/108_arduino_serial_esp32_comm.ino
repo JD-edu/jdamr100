@@ -25,7 +25,7 @@ SOFTWARE.
 #include <SoftwareSerial.h>
 
 // 소프트웨어 시리얼 핀 설정 (7번: RX, 8번: TX)
-SoftwareSerial mySerial(7, 8); // RX, TX
+SoftwareSerial mySerial(6, 9); // RX, TX
 
 void setup() {
   // 소프트웨어 시리얼 시작
