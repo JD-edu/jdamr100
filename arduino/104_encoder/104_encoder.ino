@@ -30,7 +30,7 @@ SOFTWARE.
 
 // 엔코더 핀 정의
 #define encoder_A 2
-#define encoder_B 3
+#define encoder_B 3  // left from view of robot 
 
 volatile int encoder_A_count = 0;  // 엔코더 카운트 변수
 volatile int encoder_B_count = 0;  // 엔코더 카운트 변수
@@ -57,11 +57,6 @@ void loop() {
   delay(2000);       // 2초간 전진
   motorStop();       // 모터 정지
   delay(1000);       // 1초 대기
-  
-  motorBackward(255); // 모터 후진, 속도 255 (최대)
-  delay(2000);        // 2초간 후진
-  motorStop();        // 모터 정지
-  delay(1000);        // 1초 대기
   
   // 엔코더 값 출력
   Serial.print("Encoder A Count: ");

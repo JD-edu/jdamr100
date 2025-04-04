@@ -1,5 +1,5 @@
-#define ir_R 6
-#define ir_L 5
+#define ir_R 7
+#define ir_L 8
 
 #define motor_A 10
 #define motor_B 11
